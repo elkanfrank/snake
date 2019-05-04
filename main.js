@@ -1,12 +1,8 @@
 /* 
 GAME OF SNAKE 
 
-BUG: Food can spawn inside snake
-BUG: Snake can reverse direction if pressing arrows quickly
-
 TODO: Add random obstacles (triangle shaped)
-TODO: Add random superfood for extra points
-TODO: Add score meter
+TODO: Add timer to superfood
 TODO: Save high scores to file
 
 */
@@ -21,36 +17,32 @@ const UP = 2;
 const DOWN = -2;
 const SPEED = WIDTH / COLS;
 
-let direction = 0;
+let direction = RIGHT;
 let added_piece = false;
 let eaten = true;
-let snake = new Array(1);
 let xPos = 300;
 let yPos = 300;
-let xFood = 0;
-let yFood = 0;
-let length = 1;
+let xFood;
+let yFood;
+let length = 3;
+let snake;
 let gameOver = false;
+let bonusFood = false;
+let bonusFlash = false;
 let score = 0;
+let moving = false;
+let receiveNewDirection = true;
 
 function setup()
-{
+{	
 	colorMode(RGB, 100, 100, 100);
 	stroke(100);
 	createCanvas(WIDTH + WIDTH / 4, HEIGHT);
 	frameRate(9);
 	textAlign(CENTER);
 	textSize(32);
-	snake[0] = createVector(xPos, yPos);
 	initFood();
-}
-
-function drawScore()
-{
-	textAlign(LEFT);
-	textSize(24);
-	text("Score: ", WIDTH + 60, 50)
-	text(score, WIDTH + 30, 80);
+	initSnake();
 }
 
 function draw()
@@ -69,6 +61,7 @@ function draw()
 		fill(70, 70, 70);
 		rect(0, 0, WIDTH, HEIGHT);
 		updateSnake();
+		growSnake();
 		updateFood();
 		drawFood();
 		drawSnake();

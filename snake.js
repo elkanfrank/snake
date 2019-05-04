@@ -1,3 +1,11 @@
+function initSnake()
+{
+	snake = new Array(length);
+	for (let i = 0; i < length; i++){
+		snake[i] = createVector(xPos - (i * SPEED), yPos);
+	}
+}
+
 function moveSnake()
 {
 	if (direction == RIGHT)
@@ -16,15 +24,34 @@ function moveSnake()
 		yPos = 0;
 	else if (yPos < 0)
 		yPos = HEIGHT - SPEED;
+	if (moving)
+		receiveNewDirection = true;
+}
+
+function growSnake()
+{
+	if (xPos == xFood && yPos == yFood)
+	{
+		score += 10;
+		snake.push(createVector(snake[length - 1], snake[length - 1]));
+		length++;
+	}
+	else if (bonusFood && xPos == xBonus && yPos == yBonus)
+	{
+		score += 25;
+		snake.push(createVector(snake[length - 1], snake[length - 1]));
+		length++;
+		bonusFood = false;
+	}
 }
 
 function updateSnake()
 {
-	let xEnd = snake[length - 1].x;
-	let yEnd = snake[length - 1].y;
 	let xPrev = xPos;
 	let yPrev = yPos;
 
+	if (!moving)
+		return ;
 	moveSnake();
 	snake[0].x = xPos;
 	snake[0].y = yPos;
@@ -38,12 +65,6 @@ function updateSnake()
 			snake[i].x = snake[i - 1].x;
 			snake[i].y = snake[i - 1].y;
 		}
-	}
-	if (xPos == xFood && yPos == yFood)
-	{
-		length++;
-		score += 10;
-		snake.push(createVector(xEnd, yEnd));
 	}
 }
 
