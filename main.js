@@ -32,6 +32,12 @@ let bonusFlash = false;
 let score = 0;
 let moving = false;
 let receiveNewDirection = true;
+let sw = 3;
+let foodCount = 0;
+let obstacleSize = (HEIGHT / ROWS) - (sw * 2);
+let obstacleAmount = 5;
+let obstacle = false;
+let obstaclePosition;
 
 function setup()
 {	
@@ -47,23 +53,19 @@ function setup()
 
 function draw()
 {
-	checkGameState();
 	if (gameOver){
-		background(80, 30, 30);
-		stroke(31, 31, 31);
-		fill(21, 21, 21);
-		text("GAME OVER", WIDTH / 2, HEIGHT / 2);
-		text("Score: ", WIDTH / 2, (HEIGHT / 2) + 60);
-		text(score, (WIDTH / 2) + 60, (HEIGHT / 2) + 60);
+		gameOverScreen();
 	}
 	else {
 		background(90, 90, 90);
 		fill(70, 70, 70);
 		rect(0, 0, WIDTH, HEIGHT);
 		updateSnake();
+		checkGameState();
 		growSnake();
 		updateFood();
 		drawFood();
+		drawObstacle();
 		drawSnake();
 		drawScore();
 	}

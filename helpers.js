@@ -12,16 +12,41 @@ function drawScore()
 	text(score, WIDTH + 30, 80);
 }
 
+function gameOverScreen()
+{
+	background(80, 30, 30);
+	stroke(31, 31, 31);
+	fill(21, 21, 21);
+	strokeWeight(0);
+	text("GAME OVER", WIDTH / 2, HEIGHT / 2);
+	text("Score: ", WIDTH / 2, (HEIGHT / 2) + 60);
+	text(score, (WIDTH / 2) + 60, (HEIGHT / 2) + 60);
+}
+
 function resetGame()
 {
-	snake = new Array(1);
-	length = 1;
-	snake[0] = createVector(300, 300);
+	length = 3;
+	moving = false;
+	direction = RIGHT;
+	xPos = 300;
+	yPos = 300;
+	snake = new Array(length);
+	for (let i = 0; i < length; i++){
+		snake[i] = createVector(xPos - (i * SPEED), yPos);
+	}
+	score = 0;
 }
 
 function keyPressed()
 {
-	if (!receiveNewDirection)
+	if (keyCode == 32)
+		moving = true;
+	if (keyCode == ENTER && gameOver)
+		{
+			gameOver = false;
+			resetGame();
+		}
+	if (!receiveNewDirection || !moving)
 		return ;
 	if (keyCode == UP_ARROW && direction != DOWN)
 	{
@@ -43,13 +68,6 @@ function keyPressed()
 		receiveNewDirection = false;
 		direction = LEFT;
 	}
-	else if (keyCode == ENTER && gameOver)
-	{
-		gameOver = false;
-		resetGame();
-	}
-	else if (keyCode == 32)
-		moving = true;
 }
 
 function checkGameState()
@@ -59,5 +77,13 @@ function checkGameState()
 	{
 		if (snake[0].x == snake[i].x && snake[0].y == snake[i].y)
 			gameOver = true;
+	}
+	if (obstacle)
+	{
+		for (let i = 0; i < obstaclePosition.length; i++)
+		{
+			if (snake[0].x == obstaclePosition[i].x && snake[0].y == obstaclePosition[i].y)
+			gameOver = true;
+		}
 	}
 }

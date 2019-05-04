@@ -34,6 +34,7 @@ function growSnake()
 	{
 		score += 10;
 		snake.push(createVector(snake[length - 1], snake[length - 1]));
+		foodCount++;
 		length++;
 	}
 	else if (bonusFood && xPos == xBonus && yPos == yBonus)
@@ -71,9 +72,12 @@ function updateSnake()
 function drawSnake()
 {
 	if (gameOver)
-		return ;
+	return ;
+	strokeWeight(sw);
+	stroke(70, 70, 70);
 	for (let i = 0; i < snake.length; i++){
 		fill(21, 21, 21);
-		rect(snake[i].x, snake[i].y, HEIGHT / ROWS, WIDTH / COLS);
+		rect(snake[i].x, snake[i].y, (HEIGHT / ROWS) - sw, (WIDTH / COLS) - sw);
 	}
+	noStroke();
 }
